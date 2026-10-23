@@ -8,10 +8,10 @@
 #include <vector>
 
 POAResult POA(int search_agents, int max_iterations,
-              const std::vector<double>& lowerbound,
-              const std::vector<double>& upperbound,
+              const std::vector<double> &lowerbound,
+              const std::vector<double> &upperbound,
               int dimension,
-              const ObjectiveFunction& fitness) {
+              const ObjectiveFunction &fitness) {
     if (search_agents <= 0) throw std::invalid_argument("SearchAgents must be > 0");
     if (max_iterations <= 0) throw std::invalid_argument("Max_iterations must be > 0");
     if (dimension <= 0 || static_cast<int>(lowerbound.size()) != dimension ||
@@ -19,13 +19,11 @@ POAResult POA(int search_agents, int max_iterations,
         throw std::invalid_argument("Bounds must each contain exactly dimension values");
     }
 
-    // X(agent, dimension), equivalent to the MATLAB population matrix.
-    std::vector<std::vector<double>> X(
+    std::vector<std::vector<double> > X(
         static_cast<std::size_t>(search_agents),
         std::vector<double>(static_cast<std::size_t>(dimension), 0.0));
     std::vector<double> fit(static_cast<std::size_t>(search_agents), 0.0);
 
-    // MATLAB initializes one column at a time, so retain that draw order.
     for (int j = 0; j < dimension; ++j) {
         for (int i = 0; i < search_agents; ++i) {
             X[i][j] = lowerbound[j] + random01() * (upperbound[j] - lowerbound[j]);
@@ -82,9 +80,9 @@ POAResult POA(int search_agents, int max_iterations,
                 fit[i] = f_new;
             }
 
-            // Phase 2: Winging on the water surface (exploitation phase).
+            // Phase 2
             const double radius = 0.2 * (1.0 - static_cast<double>(t) /
-                                               static_cast<double>(max_iterations));
+                                         static_cast<double>(max_iterations));
             for (int j = 0; j < dimension; ++j) {
                 X_new[j] = X[i][j] + radius * (2.0 * random01() - 1.0) * X[i][j];
             }

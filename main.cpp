@@ -9,14 +9,11 @@
 
 int main(int argc, char* argv[]) {
     try {
-        // Equivalent defaults to the supplied MATLAB main.m.
         const std::string function_name = (argc >= 2) ? argv[1] : "F1";
         const int search_agents = (argc >= 3) ? std::stoi(argv[2]) : 30;
         const int max_iterations = (argc >= 4) ? std::stoi(argv[3]) : 1000;
         const std::uint64_t seed = (argc >= 5) ? std::stoull(argv[4]) : 42ULL;
 
-        // Fixed default seed gives repeatable C++ runs. Pass another seed as argv[4]
-        // to perform a different stochastic run.
         seed_random(seed);
 
         const FunctionInfo info = fun_info(function_name);
